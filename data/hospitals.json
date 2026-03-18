@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Apollo Hospital",
+    "icuBeds": 5,
+    "generalBeds": 20
+  },
+  {
+    "name": "Care Hospital",
+    "icuBeds": 2,
+    "generalBeds": 15
+  }
+]

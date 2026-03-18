@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Patients</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1 style="text-align:center">Patient Treatment Priority Queue</h1>
+
+<div class="patient-container">
+
+<div class="search-box">
+<input type="text" id="patientSearch" placeholder="Search patient..." onkeyup="searchPatient()">
+</div>
+
+<div class="add-patient-form">
+
+<input type="text" id="pid" placeholder="Patient ID">
+<input type="text" id="pname" placeholder="Patient Name">
+<input type="text" id="disease" placeholder="Disease">
+<input type="text" id="hospital" placeholder="Hospital (optional)">
+
+<button onclick="addPatient()">Add Patient</button>
+<button onclick="downloadReport()">Download Patient Report</button>
+
+</div>
+
+<!-- TRAFFIC MONITORING PANEL -->
+
+<h3>Traffic Monitoring</h3>
+<div style="background:#be5252;padding:10px;border:1px solid #ccc;margin-bottom:20px">
+Traffic Status: <span id="trafficStatus" class="traffic-text">Loading...</span><br>
+Estimated Ambulance Delay: <span id="trafficDelay" class="traffic-text">Calculating...</span>
+</div>
+
+<h3>Emergency Activity Feed</h3>
+<div id="activityFeed" style="background:#be5252;padding:10px;height:120px;overflow:auto;border:1px solid #ccc;margin-bottom:20px"></div>
+
+<table id="patientTable">
+
+<tr>
+<th>ID</th>
+<th>Name</th>
+<th>Disease</th>
+<th>Hospital</th>
+<th>Risk</th>
+<th>Priority</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+
+<tr data-priority="1">
+<td>P001</td>
+<td>Rahul</td>
+<td>Heart Attack</td>
+<td>Apollo Hospital</td>
+<td class="critical">critical</td>
+<td>1</td>
+<td class="waiting">Waiting</td>
+<td>
+<button onclick="updateStatus(this)">Next</button>
+<button onclick="removePatient(this)">Remove</button>
+</td>
+</tr>
+
+<tr data-priority="2">
+<td>P002</td>
+<td>Anita</td>
+<td>Fracture</td>
+<td>Care Hospital</td>
+<td class="medium">medium</td>
+<td>2</td>
+<td class="waiting">Waiting</td>
+<td>
+<button onclick="updateStatus(this)">Next</button>
+<button onclick="removePatient(this)">Remove</button>
+</td>
+</tr>
+
+<tr data-priority="1">
+<td>P003</td>
+<td>Arjun</td>
+<td>Stroke</td>
+<td>Yashoda Hospital</td>
+<td class="critical">critical</td>
+<td>1</td>
+<td class="waiting">Waiting</td>
+<td>
+<button onclick="updateStatus(this)">Next</button>
+<button onclick="removePatient(this)">Remove</button>
+</td>
+</tr>
+
+<tr data-priority="3">
+<td>P004</td>
+<td>Priya</td>
+<td>Fever</td>
+<td>KIMS Hospital</td>
+<td class="low">low</td>
+<td>3</td>
+<td class="waiting">Waiting</td>
+<td>
+<button onclick="updateStatus(this)">Next</button>
+<button onclick="removePatient(this)">Remove</button>
+</td>
+</tr>
+
+<tr data-priority="2">
+<td>P005</td>
+<td>Sneha</td>
+<td>Asthma</td>
+<td>Care Hospital</td>
+<td class="medium">medium</td>
+<td>2</td>
+<td class="waiting">Waiting</td>
+<td>
+<button onclick="updateStatus(this)">Next</button>
+<button onclick="removePatient(this)">Remove</button>
+</td>
+</tr>
+
+<tr data-priority="3">
+<td>P006</td>
+<td>Vikram</td>
+<td>Cold</td>
+<td>Yashoda Hospital</td>
+<td class="low">low</td>
+<td>3</td>
+<td class="waiting">Waiting</td>
+<td>
+<button onclick="updateStatus(this)">Next</button>
+<button onclick="removePatient(this)">Remove</button>
+</td>
+</tr>
+
+</table>
+
+</div>
+
+<script>
+
+/* HOSPITAL BED DATA */
+
+let hospitalBeds = {
+"Apollo Hospital":5,
+"Care Hospital":3,
+"Yashoda Hospital":4,
+"KIMS Hospital":2
+}
+
+/* SEARCH */
+
+function searchPatient(){
+
+let input=document.getElementById("patientSearch").value.toLowerCase()
+let rows=document.querySelectorAll("#patientTable tr")
+
+for(let i=1;i<rows.length;i++){
+
+let name=rows[i].cells[1].innerText.toLowerCase()
+
+rows[i].style.display=name.includes(input)?"":"none"
+
+}
+
+}
+
+/* TRAFFIC DATA INGESTION */
+
+function updateTraffic(){
+
+let trafficLevels=["Low","Medium","High"]
+
+let traffic=trafficLevels[Math.floor(Math.random()*3)]
+
+let delay="2 mins"
+
+if(traffic==="Medium") delay="6 mins"
+if(traffic==="High") delay="12 mins"
+
+document.getElementById("trafficStatus").innerText=traffic
+document.getElementById("trafficDelay").innerText=delay
+
+logActivity("🚦 Traffic updated: "+traffic+" congestion")
+
+}
+
+updateTraffic()
+
+setInterval(updateTraffic,10000)
+
+/* AI RISK DETECTION */
+
+function detectRisk(disease){
+
+disease=disease.toLowerCase()
+
+if(disease.includes("heart")||disease.includes("stroke")||disease.includes("accident"))
+return "critical"
+
+if(disease.includes("fracture")||disease.includes("asthma")||disease.includes("diabetes"))
+return "medium"
+
+return "low"
+
+}
+
+/* NEAREST HOSPITAL WITH BED CHECK */
+
+function findNearestHospital(){
+
+let hospitals=Object.keys(hospitalBeds)
+
+for(let i=0;i<hospitals.length;i++){
+
+let hospital=hospitals[i]
+
+if(hospitalBeds[hospital]>0){
+
+hospitalBeds[hospital]--
+
+return hospital
+
+}
+
+}
+
+alert("No beds available in nearby hospitals")
+return "No Bed"
+
+}
+
+/* ACTIVITY FEED */
+
+function logActivity(message){
+
+let feed=document.getElementById("activityFeed")
+
+let item=document.createElement("div")
+
+let time=new Date().toLocaleTimeString()
+
+item.innerHTML=`<span style="color:blue">${time} - ${message}</span>`
+
+feed.prepend(item)
+
+}
+
+/* ADD PATIENT */
+
+function addPatient(){
+
+let id=document.getElementById("pid").value
+let name=document.getElementById("pname").value
+let disease=document.getElementById("disease").value
+let hospital=document.getElementById("hospital").value
+
+if(id==""||name==""||disease==""){
+alert("Fill all details")
+return
+}
+
+let risk=detectRisk(disease)
+
+if(hospital.trim()=="")
+hospital=findNearestHospital()
+
+let priority=3
+if(risk=="critical")priority=1
+if(risk=="medium")priority=2
+
+let table=document.getElementById("patientTable")
+
+let row=table.insertRow()
+
+row.setAttribute("data-priority",priority)
+
+row.innerHTML=`
+<td>${id}</td>
+<td>${name}</td>
+<td>${disease}</td>
+<td>${hospital}</td>
+<td class="${risk}">${risk}</td>
+<td>${priority}</td>
+<td class="waiting">Waiting</td>
+<td>
+<button onclick="updateStatus(this)">Next</button>
+<button onclick="removePatient(this)">Remove</button>
+</td>
+`
+
+logActivity("⚠ New patient added: "+name+" ("+risk+")")
+
+sortPatients()
+
+savePatients()
+
+}
+
+/* REMOVE PATIENT */
+
+function removePatient(btn){
+
+let row=btn.parentNode.parentNode
+let name=row.cells[1].innerText
+
+row.remove()
+
+logActivity("❌ Patient removed: "+name)
+
+savePatients()
+
+}
+
+/* STATUS UPDATE */
+
+function updateStatus(btn){
+
+let row=btn.parentNode.parentNode
+let cell=row.cells[6]
+let name=row.cells[1].innerText
+let hospital=row.cells[3].innerText
+
+if(cell.innerText=="Waiting"){
+cell.innerText="In Treatment"
+cell.className="treatment"
+logActivity("👨‍⚕ Treatment started for "+name)
+}
+
+else if(cell.innerText=="In Treatment"){
+
+cell.innerText="Discharged"
+cell.className="discharged"
+
+if(hospitalBeds[hospital]!=undefined){
+hospitalBeds[hospital]++
+}
+
+logActivity("✅ Patient discharged: "+name)
+
+}
+
+else{
+cell.innerText="Waiting"
+cell.className="waiting"
+}
+
+savePatients()
+
+}
+
+/* PRIORITY SORT */
+
+function sortPatients(){
+
+let table=document.getElementById("patientTable")
+let rows=Array.from(table.rows).slice(1)
+
+rows.sort((a,b)=>a.dataset.priority-b.dataset.priority)
+
+rows.forEach(r=>table.appendChild(r))
+
+}
+
+/* SAVE PATIENTS */
+
+function savePatients(){
+
+let rows=document.querySelectorAll("#patientTable tr")
+let data=[]
+
+for(let i=1;i<rows.length;i++){
+
+let c=rows[i].cells
+
+data.push({
+id:c[0].innerText,
+name:c[1].innerText,
+disease:c[2].innerText,
+hospital:c[3].innerText,
+risk:c[4].innerText,
+priority:c[5].innerText,
+status:c[6].innerText
+})
+
+}
+
+localStorage.setItem("patients",JSON.stringify(data))
+
+}
+
+/* LOAD PATIENTS */
+
+function loadPatients(){
+
+let data=localStorage.getItem("patients")
+
+if(!data)return
+
+let patients=JSON.parse(data)
+
+let table=document.getElementById("patientTable")
+
+table.innerHTML=table.rows[0].outerHTML
+
+patients.forEach(p=>{
+
+let row=table.insertRow()
+
+row.setAttribute("data-priority",p.priority)
+
+row.innerHTML=`
+<td>${p.id}</td>
+<td>${p.name}</td>
+<td>${p.disease}</td>
+<td>${p.hospital}</td>
+<td class="${p.risk}">${p.risk}</td>
+<td>${p.priority}</td>
+<td class="waiting">${p.status}</td>
+<td>
+<button onclick="updateStatus(this)">Next</button>
+<button onclick="removePatient(this)">Remove</button>
+</td>
+`
+
+})
+
+sortPatients()
+
+}
+
+loadPatients()
+
+/* DOWNLOAD REPORT */
+
+function downloadReport(){
+
+let rows=document.querySelectorAll("#patientTable tr")
+
+let csv=[]
+
+rows.forEach(r=>{
+
+let cols=r.querySelectorAll("th,td")
+let row=[]
+
+cols.forEach(c=>row.push(c.innerText))
+
+csv.push(row.join(","))
+
+})
+
+let blob=new Blob([csv.join("\n")],{type:"text/csv"})
+
+let link=document.createElement("a")
+
+link.href=URL.createObjectURL(blob)
+link.download="patients_report.csv"
+
+link.click()
+
+}
+
+</script>
+
+<script>
+
+let savedTheme=localStorage.getItem("theme")
+
+if(savedTheme==="dark")
+document.body.classList.add("dark")
+
+</script>
+
+</body>
+</html>

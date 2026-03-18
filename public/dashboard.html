@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="notificationBox"></div>
+
+<div class="main-layout">
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<h2>HealthAI</h2>
+
+<a href="dashboard.html">Dashboard</a>
+<a href="hospitals.html">Hospitals</a>
+<a href="patients.html">Patients</a>
+<a href="ambulance.html">Ambulances</a>
+<a href="beds.html">Beds</a>
+<a href="health-info.html">Common Health Range</a>
+<a href="firstaid.html">First Aid Assistant</a>
+<a href="traffic.html">Traffic Prediction</a>
+<a href="settings.html">Settings</a>
+<a href="map.html">Hospital Map(GPS)</a>
+<a href="#" onclick="logout()">Logout</a>
+
+</div>
+
+<!-- MAIN CONTENT -->
+
+<div class="dashboard-content">
+
+<div class="top-menu">
+<span id="userDisplay"></span>
+</div>
+
+<h1 class="dashboard-title">
+AI Smart Health Care Emergency Services
+</h1>
+
+<div class="stats">
+
+<div class="card">
+<h3>🏥 Hospitals</h3>
+<p>15</p>
+</div>
+
+<div class="card">
+<h3>🚑 Ambulances</h3>
+<p>10</p>
+</div>
+
+<div class="card">
+<h3>⚠ Critical Patients</h3>
+<p>4</p>
+</div>
+
+<div class="card">
+<h3>🛏 ICU Beds</h3>
+<p>32</p>
+</div>
+
+</div>
+
+<div class="image-container">
+<img id="healthImage" src="hospital.png">
+</div>
+
+</div>
+
+</div>
+
+<script src="dashboard.js"></script>
+
+</body>
+<script>
+
+let savedTheme = localStorage.getItem("theme")
+
+if(savedTheme === "dark"){
+document.body.classList.add("dark")
+}
+
+</script>
+</body>
+</html>

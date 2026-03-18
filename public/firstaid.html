@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>First Aid Assistant</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#111;
+color:white;
+margin:0;
+}
+
+h1{
+text-align:center;
+padding:20px;
+}
+
+#chatbox{
+width:60%;
+margin:auto;
+background:#1e1e1e;
+padding:20px;
+border-radius:10px;
+height:400px;
+overflow-y:auto;
+}
+
+.message{
+margin:10px 0;
+}
+
+.user{
+color:#4ade80;
+}
+
+.bot{
+color:#60a5fa;
+}
+
+#inputArea{
+width:60%;
+margin:auto;
+display:flex;
+margin-top:10px;
+}
+
+#userInput{
+flex:1;
+padding:12px;
+font-size:16px;
+border:none;
+}
+
+button{
+padding:12px;
+background:#2563eb;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>First Aid Assistant</h1>
+
+<div id="chatbox"></div>
+
+<div id="inputArea">
+
+<input id="userInput" placeholder="Type disease (migraine, fever, burn...)">
+
+<button onclick="sendMessage()">Search</button>
+
+</div>
+
+<script>
+
+function sendMessage(){
+
+let input=document.getElementById("userInput").value.toLowerCase()
+
+let chat=document.getElementById("chatbox")
+
+chat.innerHTML+=`<div class="message user">You: ${input}</div>`
+
+fetch("/firstaid/"+encodeURIComponent(input))
+
+.then(res=>res.json())
+
+.then(data=>{
+
+chat.innerHTML+=`
+<div class="message bot">
+<b>Disease:</b> ${data.name}<br><br>
+<b>Cause:</b> ${data.cause}<br>
+<b>Precaution:</b> ${data.precaution}<br>
+<b>Tablets:</b> ${data.tablets}<br>
+<b>Doctor Needed:</b> ${data.doctor}<br>
+<b>First Aid:</b> ${data.firstaid}
+</div>
+`
+
+chat.scrollTop=chat.scrollHeight
+
+})
+
+document.getElementById("userInput").value=""
+
+}
+
+document.getElementById("userInput").addEventListener("keypress",function(e){
+if(e.key==="Enter"){
+sendMessage()
+}
+})
+
+
+
+
+</script>
+
+</body>
+</html>
+<script>
+document.getElementById("userInput").addEventListener("keypress",function(e){
+if(e.key==="Enter"){
+sendMessage()
+}
+})
+</script>

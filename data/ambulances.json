@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "driver": "Ravi",
+    "location": "Hyderabad",
+    "status": "Available"
+  },
+  {
+    "id": 2,
+    "driver": "Suresh",
+    "location": "Gachibowli",
+    "status": "On Duty"
+  }
+]

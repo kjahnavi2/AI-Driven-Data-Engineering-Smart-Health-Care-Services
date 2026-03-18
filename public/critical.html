@@ -1,0 +1,18 @@
+<div class="sidebar">
+
+<h2>HealthAI</h2>
+
+<a href="dashboard.html">Dashboard</a>
+<a href="hospitals.html">Hospitals</a>
+<a href="ambulance.html">Ambulances</a>
+<a href="doctors.html">Doctors</a>
+<a href="patients.html">Patients</a>
+<a href="critical.html">Critical Patients</a>
+<a href="settings.html">Settings</a>
+<a href="about.html">About</a>
+
+</div>
+const critical = patients.filter(p =>
+p.condition.includes("Heart") ||
+p.condition.includes("Trauma")
+)

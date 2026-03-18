@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Hospital Map - Nearest Ambulance</title>
+
+<meta charset="utf-8"/>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+}
+
+#map{
+height:90vh;
+width:100%;
+}
+
+h2{
+text-align:center;
+margin:10px;
+}
+
+#searchBox{
+position:absolute;
+top:60px;
+left:50%;
+transform:translateX(-50%);
+z-index:1000;
+width:350px;
+padding:10px;
+font-size:16px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Find Nearest Ambulance</h2>
+
+<input id="searchBox" placeholder="Search Location (Example: Kukatpally Hyderabad)">
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+/* MAP */
+
+let map=L.map('map').setView([17.3850,78.4867],12)
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+maxZoom:19
+}).addTo(map)
+
+/* AMBULANCE ICON */
+
+let ambulanceIcon=L.icon({
+iconUrl:"https://cdn-icons-png.flaticon.com/512/2967/2967350.png",
+iconSize:[40,40]
+})
+
+/* AMBULANCE DATABASE */
+
+let ambulances=[
+
+{id:"AMB101",lat:17.3700,lng:78.4700},
+{id:"AMB102",lat:17.3900,lng:78.4600},
+{id:"AMB103",lat:17.4050,lng:78.4500},
+{id:"AMB104",lat:17.4300,lng:78.4800}
+
+]
+
+/* ADD AMBULANCE MARKERS */
+
+let ambulanceMarkers=[]
+
+ambulances.forEach(a=>{
+
+let marker=L.marker([a.lat,a.lng],{icon:ambulanceIcon})
+.addTo(map)
+.bindPopup("🚑 "+a.id)
+
+ambulanceMarkers.push(marker)
+
+})
+
+/* SEARCH POINTER */
+
+let searchMarker=null
+
+/* DISTANCE FUNCTION */
+
+function getDistance(lat1,lon1,lat2,lon2){
+
+let R=6371
+
+let dLat=(lat2-lat1)*Math.PI/180
+let dLon=(lon2-lon1)*Math.PI/180
+
+let a=
+Math.sin(dLat/2)*Math.sin(dLat/2)+
+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*
+Math.sin(dLon/2)*Math.sin(dLon/2)
+
+let c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a))
+
+return R*c
+
+}
+
+/* FIND NEAREST AMBULANCE */
+
+function findNearest(lat,lon){
+
+let minDistance=99999
+let nearest=null
+
+ambulances.forEach(a=>{
+
+let d=getDistance(lat,lon,a.lat,a.lng)
+
+if(d<minDistance){
+
+minDistance=d
+nearest=a
+
+}
+
+})
+
+return nearest
+
+}
+
+/* SEARCH SYSTEM */
+
+let searchBox=document.getElementById("searchBox")
+
+searchBox.addEventListener("keypress",function(e){
+
+if(e.key==="Enter"){
+
+let value=searchBox.value
+
+fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${value}`)
+
+.then(res=>res.json())
+
+.then(data=>{
+
+if(data.length>0){
+
+let lat=parseFloat(data[0].lat)
+let lon=parseFloat(data[0].lon)
+
+/* center map */
+
+map.setView([lat,lon],14)
+
+/* show location pointer */
+
+if(searchMarker) map.removeLayer(searchMarker)
+
+searchMarker=L.marker([lat,lon]).addTo(map)
+.bindPopup("📍 Your Location")
+.openPopup()
+
+/* find nearest ambulance */
+
+let nearest=findNearest(lat,lon)
+
+/* highlight ambulance */
+
+L.marker([nearest.lat,nearest.lng],{icon:ambulanceIcon})
+.addTo(map)
+.bindPopup("🚑 Nearest Ambulance: "+nearest.id)
+.openPopup()
+
+alert("Nearest Ambulance: "+nearest.id)
+
+}else{
+
+alert("Location not found")
+
+}
+
+})
+
+}
+
+})
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Dr Rao",
+    "specialization": "Cardiologist",
+    "status": "Available"
+  },
+  {
+    "name": "Dr Sharma",
+    "specialization": "Trauma Specialist",
+    "status": "Busy"
+  }
+]

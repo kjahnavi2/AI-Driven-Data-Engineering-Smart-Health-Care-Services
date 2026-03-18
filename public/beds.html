@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Hospital Bed Availability</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1 style="text-align:center">Hospital Bed Availability</h1>
+
+<div class="beds-container">
+
+<table>
+
+<tr>
+<th>Hospital</th>
+<th>Section</th>
+<th>Total Beds</th>
+<th>Available Beds</th>
+<th>Status</th>
+</tr>
+
+<tr>
+<td>Apollo Hospital</td>
+<td>ICU</td>
+<td>50</td>
+<td>8</td>
+<td class="available">Available</td>
+</tr>
+
+<tr>
+<td>Care Hospital</td>
+<td>Emergency</td>
+<td>40</td>
+<td>0</td>
+<td class="full">Full</td>
+</tr>
+
+<tr>
+<td>Yashoda Hospital</td>
+<td>General Ward</td>
+<td>120</td>
+<td>30</td>
+<td class="available">Available</td>
+</tr>
+
+<tr>
+<td>KIMS Hospital</td>
+<td>Surgery</td>
+<td>60</td>
+<td>5</td>
+<td class="available">Available</td>
+</tr>
+
+<tr>
+<td>Sunshine Hospital</td>
+<td>ICU</td>
+<td>35</td>
+<td>0</td>
+<td class="full">Full</td>
+</tr>
+
+<tr>
+<td>Rainbow Hospital</td>
+<td>Pediatrics</td>
+<td>45</td>
+<td>12</td>
+<td class="available">Available</td>
+</tr>
+
+<tr>
+<td>Global Hospital</td>
+<td>Emergency</td>
+<td>30</td>
+<td>3</td>
+<td class="available">Available</td>
+</tr>
+
+<tr>
+<td>Medicover Hospital</td>
+<td>ICU</td>
+<td>40</td>
+<td>2</td>
+<td class="available">Available</td>
+</tr>
+
+<tr>
+<td>Star Hospital</td>
+<td>General Ward</td>
+<td>80</td>
+<td>20</td>
+<td class="available">Available</td>
+</tr>
+
+<tr>
+<td>Continental Hospital</td>
+<td>Surgery</td>
+<td>55</td>
+<td>0</td>
+<td class="full">Full</td>
+</tr>
+
+</table>
+
+</div>
+<script>
+
+let savedTheme = localStorage.getItem("theme")
+
+if(savedTheme === "dark"){
+document.body.classList.add("dark")
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Hospitals</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h1 style="text-align:center">Available Hospitals</h1>
+
+<div class="hospital-container">
+
+<div class="search-box">
+<input type="text" id="hospitalSearch" placeholder="Search hospital..." onkeyup="searchHospital()">
+</div>
+
+<table id="hospitalTable">
+
+<tr>
+<th>Hospital</th>
+<th>Address</th>
+<th>From</th>
+<th>To</th>
+<th>Status</th>
+</tr>
+
+<tr>
+<td>Apollo Hospital</td>
+<td>Hyderabad</td>
+<td>08:00 AM</td>
+<td>10:00 PM</td>
+<td class="available">Available</td>
+</tr>
+
+<tr>
+<td>Care Hospital</td>
+<td>Banjara Hills</td>
+<td>09:00 AM</td>
+<td>09:00 PM</td>
+<td class="busy">Busy</td>
+</tr>
+
+<tr>
+<td>Yashoda Hospital</td>
+<td>Somajiguda</td>
+<td>07:00 AM</td>
+<td>11:00 PM</td>
+<td class="available">Available</td>
+</tr>
+
+<tr>
+<td>KIMS Hospital</td>
+<td>Secunderabad</td>
+<td>08:30 AM</td>
+<td>10:30 PM</td>
+<td class="not">Not Available</td>
+</tr>
+
+<tr>
+<td>Sunshine Hospital</td>
+<td>Gachibowli</td>
+<td>09:00 AM</td>
+<td>08:00 PM</td>
+<td class="available">Available</td>
+</tr>
+
+<tr>
+<td>Rainbow Hospital</td>
+<td>Kondapur</td>
+<td>08:00 AM</td>
+<td>09:00 PM</td>
+<td class="busy">Busy</td>
+</tr>
+
+<tr>
+<td>Medicover Hospital</td>
+<td>Hitech City</td>
+<td>07:30 AM</td>
+<td>10:00 PM</td>
+<td class="available">Available</td>
+</tr>
+
+<tr>
+<td>Global Hospital</td>
+<td>Lakdikapul</td>
+<td>08:00 AM</td>
+<td>09:30 PM</td>
+<td class="not">Not Available</td>
+</tr>
+
+<tr>
+<td>Continental Hospital</td>
+<td>Nanakramguda</td>
+<td>09:00 AM</td>
+<td>10:00 PM</td>
+<td class="available">Available</td>
+</tr>
+
+<tr>
+<td>Star Hospital</td>
+<td>Banjara Hills</td>
+<td>08:30 AM</td>
+<td>09:00 PM</td>
+<td class="busy">Busy</td>
+</tr>
+
+<tr>
+<td>Image Hospital</td>
+<td>Ameerpet</td>
+<td>08:00 AM</td>
+<td>10:00 PM</td>
+<td class="available">Available</td>
+</tr>
+
+<tr>
+<td>Lotus Hospital</td>
+<td>Kukatpally</td>
+<td>09:00 AM</td>
+<td>08:30 PM</td>
+<td class="busy">Busy</td>
+</tr>
+
+<tr>
+<td>Olive Hospital</td>
+<td>Mehdipatnam</td>
+<td>08:00 AM</td>
+<td>09:00 PM</td>
+<td class="available">Available</td>
+</tr>
+
+<tr>
+<td>Asian Institute Hospital</td>
+<td>Gachibowli</td>
+<td>07:30 AM</td>
+<td>10:00 PM</td>
+<td class="not">Not Available</td>
+</tr>
+
+<tr>
+<td>Matrix Hospital</td>
+<td>Madhapur</td>
+<td>09:00 AM</td>
+<td>09:30 PM</td>
+<td class="available">Available</td>
+</tr>
+
+</table>
+
+</div>
+
+<script>
+
+function searchHospital(){
+
+let input=document.getElementById("hospitalSearch").value.toLowerCase()
+
+let table=document.getElementById("hospitalTable")
+
+let rows=table.getElementsByTagName("tr")
+
+for(let i=1;i<rows.length;i++){
+
+let hospital=rows[i].getElementsByTagName("td")[0]
+
+if(hospital){
+
+let text=hospital.textContent.toLowerCase()
+
+if(text.indexOf(input)>-1){
+rows[i].style.display=""
+}else{
+rows[i].style.display="none"
+}
+
+}
+
+}
+
+}
+
+</script>
+<script>
+
+let savedTheme = localStorage.getItem("theme")
+
+if(savedTheme === "dark"){
+document.body.classList.add("dark")
+}
+
+</script>
+
+</body>
+</html>

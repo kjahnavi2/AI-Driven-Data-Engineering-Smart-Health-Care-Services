@@ -1,0 +1,12 @@
+[
+  {
+    "name": "Rahul",
+    "age": 45,
+    "condition": "Heart Problem"
+  },
+  {
+    "name": "Anita",
+    "age": 30,
+    "condition": "Accident Injury"
+  }
+]

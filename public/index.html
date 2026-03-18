@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>AI Smart Health Care Emergency Services</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="top-menu">
+<a href="about.html">About</a>
+<a href="settings.html">Settings</a>
+</div>
+
+<h1 class="main-title">AI Smart Health Care Emergency Services</h1>
+
+<div class="auth-box">
+
+<input type="text" id="username" placeholder="Username">
+
+<input type="password" id="password" placeholder="Password">
+
+<div class="btn-group">
+
+<button onclick="signup()">Sign Up</button>
+
+<button onclick="login()">Login</button>
+
+</div>
+
+<p class="note">
+If you are a new user click <b>Sign Up</b> first
+</p>
+
+</div>
+
+<script>
+
+/* SIGNUP */
+
+function signup(){
+
+let username=document.getElementById("username").value
+let password=document.getElementById("password").value
+
+if(username=="" || password==""){
+
+alert("Enter username and password")
+
+return
+
+}
+
+localStorage.setItem(username,password)
+
+alert("Account created successfully")
+
+}
+
+/* LOGIN */
+
+function login(){
+
+let username=document.getElementById("username").value
+let password=document.getElementById("password").value
+
+if(localStorage.getItem(username)===password){
+
+localStorage.setItem("loggedUser",username)
+
+window.location.href="dashboard.html"
+
+}else{
+
+alert("Invalid username or password")
+
+}
+
+}
+
+</script>
+<script>
+
+let savedTheme = localStorage.getItem("theme")
+
+if(savedTheme === "dark"){
+document.body.classList.add("dark")
+}
+
+</script>
+</body>
+</html>
